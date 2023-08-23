@@ -1,0 +1,100 @@
+@import '~node_modules/modern-normalize/modern-normalize.css';
+
+body {
+    width: 1280px;
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-bottom: 30px;
+
+}
+
+h1, h2, h3, p, ul, ol {
+    margin: 0;
+}
+
+ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+img {
+    display: block;
+}
+
+.search-form {
+    padding: 25px 0;
+}
+
+.search-form>input {
+    padding: 5px 10px;
+    font-size: 16px;
+}
+
+.gallery {
+
+    display: flex;
+    gap: 16px;
+    row-gap: 15px;
+    flex-wrap: wrap;
+
+    margin-bottom: 20px;
+}
+
+.photo-card {
+    min-width: calc((100% - 50px) / 4);
+}
+
+.info {
+    padding: 5px 3px 10px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid black;
+
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 16px;
+
+
+}
+
+.is-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    border: 0;
+    padding: 0;
+
+    white-space: nowrap;
+    clip-path: inset(100%);
+    clip: rect(0 0 0 0);
+    overflow: hidden;
+}
+
+.btn-center {
+    display: flex;
+    justify-content: end;
+}
+
+.button {
+    cursor: pointer;
+    border: 2px solid black;
+    color: black;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    background-color: white;
+    font-weight: 700;
+}
+
+.load-more:hover, .load-more:focus {
+    color: white;
+    background-color: black;
+    transition: color 250ms linear, background-color 250ms linear;
+}
