@@ -27,6 +27,7 @@ function onFormSubmit(event) {
 
   getImages(page)
     .then(response => {
+      console.log(response);
       maxPage = Math.ceil(response.data.totalHits / per_page);
       renderImageGallery(response.data.hits);
       if (response.data.totalHits > 0) {
@@ -40,7 +41,7 @@ function onFormSubmit(event) {
         }
       }
     })
-    .catch(error => console.log(error));
+    .catch(error => Notify.failure('Oops, something went wrong'));
   divEl.innerHTML = '';
 }
 
@@ -110,7 +111,7 @@ function onClickLoadMoreBtn() {
         divEl.firstElementChild.getBoundingClientRect();
 
       window.scrollBy({
-        top: cardHeight * 2,
+        top: cardHeight * 2.4,
         behavior: 'smooth',
       });
     })

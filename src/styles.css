@@ -33,17 +33,15 @@ img {
 }
 
 .gallery {
-
     display: flex;
     gap: 16px;
     row-gap: 15px;
     flex-wrap: wrap;
-
     margin-bottom: 20px;
 }
 
 .photo-card {
-    min-width: calc((100% - 50px) / 4);
+    width: calc((100% - 50px) / 4);
 }
 
 .info {
@@ -79,7 +77,7 @@ img {
 
 .btn-center {
     display: flex;
-    justify-content: end;
+    justify-content: center;
 }
 
 .button {
