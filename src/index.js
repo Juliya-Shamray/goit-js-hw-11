@@ -27,7 +27,6 @@ function onFormSubmit(event) {
 
   getImages(page)
     .then(response => {
-      console.log(response);
       maxPage = Math.ceil(response.data.totalHits / per_page);
       renderImageGallery(response.data.hits);
       if (response.data.totalHits > 0) {
@@ -90,7 +89,6 @@ function renderImageGallery(arr) {
 function onClickLoadMoreBtn() {
   page += 1;
   if (page === maxPage) {
-    console.log(maxPage);
     loadMoreBtn.classList.add('is-hidden');
 
     Notify.info(
@@ -115,5 +113,5 @@ function onClickLoadMoreBtn() {
         behavior: 'smooth',
       });
     })
-    .catch(error => console.log(error));
+    .catch(error => Notify.failure('Oops, something went wrong'));
 }
