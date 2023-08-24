@@ -6,29 +6,49 @@ import { getImages } from './helpers';
 
 let page = 0;
 let per_page = 40;
+let maxPage = 1;
 let lightbox;
 
 const formEl = document.querySelector('.search-form');
 const divEl = document.querySelector('.gallery');
 const loadMoreBtn = document.querySelector('.load-more');
 
-loadMoreBtn.classList.add('is-hidden');
+const errorRequest = 'Oops, something went wrong';
+const errorNoImages =
+  'Sorry, there are no images matching your search query. Please try again.';
 
 formEl.addEventListener('submit', onFormSubmit);
 loadMoreBtn.addEventListener('click', onClickLoadMoreBtn);
+formEl.addEventListener('input', onInputEnter);
 
-let maxPage = 1;
+loadMoreBtn.classList.add('is-hidden');
+formEl.lastElementChild.disabled = true;
+
+function onInputEnter(event) {
+  const input = event.target.value.trim();
+  formEl.lastElementChild.disabled = true;
+  if (input.trim() !== '') {
+    formEl.lastElementChild.disabled = false;
+  }
+}
 
 function onFormSubmit(event) {
   page = 1;
   event.preventDefault();
-
+  lightbox = new SimpleLightbox('.gallery a');
   loadMoreBtn.classList.add('is-hidden');
 
   getImages(page)
     .then(response => {
       maxPage = Math.ceil(response.data.totalHits / per_page);
       renderImageGallery(response.data.hits);
+      if (response.data.total === 0) {
+        Notify.failure(errorNoImages, {
+          position: 'center-top',
+          fontSize: '16px',
+          width: '400px',
+        });
+      }
       if (response.data.totalHits > 0) {
         Notify.info(`Hooray! We found ${response.data.totalHits} images.`, {
           timeout: 3000,
@@ -40,8 +60,10 @@ function onFormSubmit(event) {
         }
       }
     })
-    .catch(error => Notify.failure('Oops, something went wrong'));
+    .catch(error => Notify.failure(errorRequest));
+
   divEl.innerHTML = '';
+  lightbox.refresh();
 }
 
 function renderImageGallery(arr) {
@@ -82,8 +104,7 @@ function renderImageGallery(arr) {
     )
     .join('');
   divEl.insertAdjacentHTML('beforeend', gallery);
-
-  lightbox = new SimpleLightbox('.gallery a');
+  lightbox.refresh();
 }
 
 function onClickLoadMoreBtn() {
@@ -91,15 +112,12 @@ function onClickLoadMoreBtn() {
   if (page === maxPage) {
     loadMoreBtn.classList.add('is-hidden');
 
-    Notify.info(
-      'Sorry, there are no images matching your search query. Please try again.',
-      {
-        position: 'center-top',
-        width: '400px',
-        fontSize: '16px',
-        timeout: 5000,
-      }
-    );
+    Notify.info(errorNoImages, {
+      position: 'center-top',
+      width: '400px',
+      fontSize: '16px',
+      timeout: 2000,
+    });
   }
 
   getImages(page)
@@ -113,5 +131,5 @@ function onClickLoadMoreBtn() {
         behavior: 'smooth',
       });
     })
-    .catch(error => Notify.failure('Oops, something went wrong'));
+    .catch(error => Notify.failure(errorRequest));
 }
