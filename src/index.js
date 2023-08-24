@@ -31,7 +31,6 @@ function onInputEnter(event) {
   if (input.trim() !== '') {
     formEl.lastElementChild.disabled = false;
   }
-  divEl.innerHTML = '';
 }
 
 function onFormSubmit(event) {
