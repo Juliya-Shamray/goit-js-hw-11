@@ -25,11 +25,13 @@ loadMoreBtn.classList.add('is-hidden');
 formEl.lastElementChild.disabled = true;
 
 function onInputEnter(event) {
+  loadMoreBtn.classList.add('is-hidden');
   const input = event.target.value.trim();
   formEl.lastElementChild.disabled = true;
   if (input.trim() !== '') {
     formEl.lastElementChild.disabled = false;
   }
+  divEl.innerHTML = '';
 }
 
 function onFormSubmit(event) {
