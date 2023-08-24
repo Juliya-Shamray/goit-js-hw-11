@@ -4,6 +4,7 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 
 import { getImages } from './helpers';
 
+let query = '';
 let page = 0;
 let per_page = 40;
 let maxPage = 1;
@@ -25,7 +26,6 @@ loadMoreBtn.classList.add('is-hidden');
 formEl.lastElementChild.disabled = true;
 
 function onInputEnter(event) {
-  loadMoreBtn.classList.add('is-hidden');
   const input = event.target.value.trim();
   formEl.lastElementChild.disabled = true;
   if (input.trim() !== '') {
@@ -33,37 +33,41 @@ function onInputEnter(event) {
   }
 }
 
-function onFormSubmit(event) {
+async function onFormSubmit(event) {
+  query = formEl.elements.searchQuery.value;
   page = 1;
   event.preventDefault();
   lightbox = new SimpleLightbox('.gallery a');
   loadMoreBtn.classList.add('is-hidden');
 
-  getImages(page)
-    .then(response => {
-      maxPage = Math.ceil(response.data.totalHits / per_page);
-      renderImageGallery(response.data.hits);
-      if (response.data.total === 0) {
-        Notify.failure(errorNoImages, {
-          position: 'center-top',
-          fontSize: '16px',
-          width: '400px',
-        });
-      }
-      if (response.data.totalHits > 0) {
-        Notify.info(`Hooray! We found ${response.data.totalHits} images.`, {
-          timeout: 3000,
-        });
-        if (response.data.totalHits < 40) {
-          loadMoreBtn.classList.add('is-hidden');
-        } else {
-          loadMoreBtn.classList.remove('is-hidden');
-        }
-      }
-    })
-    .catch(error => Notify.failure(errorRequest));
+  try {
+    let response = await getImages(page, query);
+    maxPage = Math.ceil(response.data.totalHits / per_page);
 
-  divEl.innerHTML = '';
+    if (response.data.total === 0) {
+      Notify.failure(errorNoImages, {
+        position: 'center-top',
+        fontSize: '16px',
+        width: '400px',
+      });
+    }
+    if (response.data.totalHits > 0) {
+      Notify.info(`Hooray! We found ${response.data.totalHits} images.`, {
+        timeout: 2500,
+      });
+      if (response.data.totalHits < 40) {
+        loadMoreBtn.classList.add('is-hidden');
+      } else {
+        loadMoreBtn.classList.remove('is-hidden');
+      }
+    }
+    divEl.innerHTML = '';
+    renderImageGallery(response.data.hits);
+  } catch (error) {
+    console.log(error);
+    Notify.failure(errorRequest);
+  }
+
   lightbox.refresh();
 }
 
@@ -108,7 +112,7 @@ function renderImageGallery(arr) {
   lightbox.refresh();
 }
 
-function onClickLoadMoreBtn() {
+async function onClickLoadMoreBtn() {
   page += 1;
   if (page === maxPage) {
     loadMoreBtn.classList.add('is-hidden');
@@ -120,17 +124,17 @@ function onClickLoadMoreBtn() {
       timeout: 2000,
     });
   }
+  try {
+    const response = await getImages(page, query);
+    renderImageGallery(response.data.hits);
+    const { height: cardHeight } =
+      divEl.firstElementChild.getBoundingClientRect();
 
-  getImages(page)
-    .then(response => {
-      renderImageGallery(response.data.hits);
-      const { height: cardHeight } =
-        divEl.firstElementChild.getBoundingClientRect();
-
-      window.scrollBy({
-        top: cardHeight * 2.4,
-        behavior: 'smooth',
-      });
-    })
-    .catch(error => Notify.failure(errorRequest));
+    window.scrollBy({
+      top: cardHeight * 2.4,
+      behavior: 'smooth',
+    });
+  } catch (error) {
+    Notify.failure(errorRequest);
+  }
 }

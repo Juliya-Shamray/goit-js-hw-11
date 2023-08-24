@@ -1,7 +1,6 @@
 @import '~node_modules/modern-normalize/modern-normalize.css';
 
 body {
-
     margin-bottom: 30px;
 }
 
@@ -16,14 +15,34 @@ ul {
 
 img {
     display: block;
+    width: 100%;
 }
 
 .container {
-    width: 1280px;
     padding-left: 15px;
     padding-right: 15px;
     margin-right: auto;
     margin-left: auto;
+}
+
+@media screen and (min-width:320px) {
+    .container {
+        max-width: 428px;
+    }
+}
+
+@media screen and (min-width:768px) {
+    .container {
+        max-width: 768px;
+    }
+
+}
+
+@media screen and (min-width:1280px) {
+    .container {
+        max-width: 1280px;
+    }
+
 }
 
 .search {
@@ -49,15 +68,47 @@ img {
 
 .gallery {
     display: flex;
-    gap: 16px;
     row-gap: 15px;
     flex-wrap: wrap;
     margin-bottom: 20px;
 }
 
+
+
+@media screen and (min-width:768px) {
+    .gallery {
+        gap: 25px
+    }
+}
+
+@media screen and (min-width:1280px) {
+    .gallery {
+        gap: 16px;
+    }
+}
+
 .photo-card {
-    width: calc((100% - 50px) / 4);
     box-shadow: 5px 5px 10px #1b1a1b;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+@media screen and (min-width:320px) {
+    .photo-card {
+        width: 300px;
+    }
+}
+
+@media screen and (min-width:768px) {
+    .photo-card {
+        width: calc((100% - 50px) / 2)
+    }
+}
+
+@media screen and (min-width:1280px) {
+    .photo-card {
+        width: calc((100% - 50px) / 4)
+    }
 }
 
 .info {
@@ -72,8 +123,6 @@ img {
     flex-direction: column;
     align-items: center;
     font-size: 16px;
-
-
 }
 
 .is-hidden {
@@ -107,7 +156,17 @@ img {
     transition: color 250ms linear, background-color 250ms linear;
 }
 
-.load-more:hover, .load-more:focus {
+.load-more:hover, .load-more:focus, button:hover, .button:focus {
     color: white;
     background-color: black;
+    fill: azure;
+}
+
+.img-search {
+    fill: black;
+    transition: fill 250ms linear;
+}
+
+.button:hover .img-search {
+    fill: azure;
 }
